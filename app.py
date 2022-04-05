@@ -29,12 +29,16 @@ def startingPage():
 # ========================================================
 # MAKING API ROUTES TO RETRIEVE THE DATA FROM THE DATABASE
 # --------------------------------------------------------
+uri=os.getenv("DATABASE_URL",
+        f'postgresql+psycopg2://postgres:{password}@localhost/Project_3_ev_stations')
 
+if uri.startswith("postgres://"):
+    uri = uri.replace("postgres://", "postgresql://", 1)
+# rest of connection code using the connection string `uri`
 
 @app.route("/evMap")
 def evStationMaps():
-    engine = create_engine(os.getenv("DATABASE_URL",
-        f'postgresql+psycopg2://postgres:{password}@localhost/Project_3_ev_stations'))
+    engine = create_engine(uri)
 
     # reflect an existing database into a new model
     Base = automap_base()
@@ -65,8 +69,7 @@ def evStationMaps():
 @app.route("/state-emission/overview")
 def statesco2_emission():
 
-    engine = create_engine(os.getenv("DATABASE_URL",
-        f'postgresql+psycopg2://postgres:{password}@localhost/Project_3_ev_stations'))
+    engine = create_engine(uri)
     # reflect an existing database into a new model
     Base = automap_base()
     # reflect the tables
@@ -96,8 +99,7 @@ def statesco2_emission():
 
 @app.route("/us-emission")
 def usandworldco2():
-    engine = create_engine(os.getenv("DATABASE_URL",
-        f'postgresql+psycopg2://postgres:{password}@localhost/Project_3_ev_stations'))
+    engine = create_engine (uri)
 
     # reflect an existing database into a new model
     Base = automap_base()
